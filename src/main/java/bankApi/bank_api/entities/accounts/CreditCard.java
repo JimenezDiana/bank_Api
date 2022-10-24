@@ -23,15 +23,15 @@ public class CreditCard extends Account{
 
     private LocalDate checkingInterestRate;
 
-    public CreditCard(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal creditLimit, BigDecimal interestRate,  String secretKey, LocalDate checkingInterestRate) {
-        super(balance, primaryOwner, secondaryOwner, secretKey);
+    public CreditCard(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal creditLimit, BigDecimal interestRate,  String password, LocalDate checkingInterestRate) {
+        super(balance, primaryOwner, secondaryOwner, password);
         this.creditLimit = creditLimit;
         setInterestRate(interestRate);
         setCheckingInterestRate(checkingInterestRate);
     }
 
-    public CreditCard(Money balance, AccountHolder primaryOwner,  AccountHolder secondaryOwner, String secretKey) {
-        super(balance, primaryOwner, secondaryOwner, secretKey);
+    public CreditCard(Money balance, AccountHolder primaryOwner,  AccountHolder secondaryOwner, String password) {
+        super(balance, primaryOwner, secondaryOwner, password);
     }
 
     public CreditCard(BigDecimal creditLimit, AccountHolder primaryOwner, BigDecimal interestRate, AccountHolder secondaryOwner, Money limit, Money rate) {
@@ -89,10 +89,10 @@ public class CreditCard extends Account{
     }
 
     public Money checkMonthlyInterest(){
-        BigDecimal bigDec =  interestRate.divide(BigDecimal.valueOf(12),4, RoundingMode.HALF_EVEN);
+        BigDecimal subInterest =  interestRate.divide(BigDecimal.valueOf(12),4, RoundingMode.HALF_EVEN);
         if (Period.between(getCheckingInterestRate().plusMonths(1), LocalDate.now()).getMonths() > 0){
-            BigDecimal bigDecimal = getBalance().getAmount().multiply(bigDec);
-            super.setBalance((getBalance().decreaseAmount(bigDec)));
+            BigDecimal product = getBalance().getAmount().multiply(subInterest);
+            super.setBalance((getBalance().decreaseAmount(product)));
             setCheckingInterestRate(checkingInterestRate.plusMonths(1));
         }
         setCheckingInterestRate(LocalDate.now());

@@ -1,5 +1,6 @@
 package bankApi.bank_api.entities.accounts;
 
+import bankApi.bank_api.Enum.Status;
 import bankApi.bank_api.entities.Transaction;
 import bankApi.bank_api.entities.users.AccountHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,14 +40,18 @@ public abstract class Account {
     @JsonIgnore
     private List<Transaction> transactionList;
 
-    private String secretKey;
+    private String password;
 
-    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+    private Status status = Status.ACTIVE;
+
+
+    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password) {
         this.balance = balance;
         setPrimaryOwner(primaryOwner);
         setSecondaryOwner(secondaryOwner);
         this.creationDate = LocalDate.now();
-        setSecretKey(secretKey);
+        setSecretKey(password);
+        this.status = Status.ACTIVE;
     }
 
 /*    public Account(Money balance, AccountHolder primaryOwner, BigDecimal penaltyFee, LocalDate creationDate) {
@@ -60,11 +65,11 @@ public abstract class Account {
     }
 
     public String getSecretKey() {
-        return secretKey;
+        return password;
     }
 
     public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
+        this.password = secretKey;
     }
 
     public LocalDate getCreationDate() {
@@ -118,5 +123,25 @@ public abstract class Account {
 
     public void setSecondaryOwner(AccountHolder secondaryOwner) {
         this.secondaryOwner = secondaryOwner;
+    }
+
+    public void setBalance(Money balance) {
+        this.balance = balance;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

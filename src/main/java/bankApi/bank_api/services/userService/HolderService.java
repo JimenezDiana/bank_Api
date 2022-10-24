@@ -20,7 +20,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.EmptyStackException;
 import java.util.List;
 
@@ -51,49 +54,30 @@ public class HolderService {
     @Autowired
     RoleRepository roleRepository;
 
+
     public List<Account> getAccounts(Long id){
         List<Account> accounts= accountRepository.findByPrimaryOwner(holderRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "this ID doesn't match with any user")));
         accounts.addAll(accountRepository.findBySecondaryOwner(holderRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "this ID doesn't match with any user"))));
         return accounts;
     }
 
-
-
-    /* ==>AUN NO FUNCIONA<==
-    public Money balanceAccount(Long id){
-        Savings savings = new Savings();
-        CreditCard creditCard = new CreditCard();
-        Checking checking = new Checking();
-
-        if(savingRepository.existsById(id)){
-           savings.checkInterest();
-           savingRepository.save(savings);
-           return savings.getBalance();
-        }
-        else if(creditCardRepository.findById(id).isPresent()){
-           creditCard.checkMonthlyInterest();
-           creditCardRepository.save(creditCard);
-           return creditCard.getBalance();
-        }
-        else if(checkingRepository.findById(id).isPresent()){
-           checking.checkMonthlyMaintenanceFee();
-           checkingRepository.save(checking);
-           return checking.getBalance();
-        }
-        else{
-            Account acc = accountRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "This account not exist"));
-            return acc.getBalance();
-        }
-
-    }*/
-
-    public Money getBalance(Long id){
+    //////MIRAR BIEN/////--> get balance con las formulas...pero no funciona!!
+    public Money getBalanceByIdAcc(Long id){
         if (savingRepository.existsById(id)){
-            return getBalanceSavingAccount(id);
+            Savings account = savingRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
+            account.checkInterest();
+            savingRepository.save(account);
+            return account.getBalance();
         } else if (checkingRepository.existsById(id)) {
-            return getBalanceCheckingAccount(id);
+            Checking account = checkingRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
+            account.checkMonthlyMaintenanceFee();
+            checkingRepository.save(account);
+            return account.getBalance();
         } else if (creditCardRepository.existsById(id)) {
-            return getBalanceCreditCard(id);
+            CreditCard account = creditCardRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
+            account.checkMonthlyInterest();
+            creditCardRepository.save(account);
+            return account.getBalance();
         } else {
             Account account = accountRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
             return account.getBalance();
@@ -101,32 +85,14 @@ public class HolderService {
 
     }
 
-    //////MIRAR BIEN/////
-    public Money getBalanceSavingAccount(Long id){
-        Savings account = savingRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
-        account.checkInterest();
-        savingRepository.save(account);
-        return account.getBalance();
-    }
 
-    public Money getBalanceCheckingAccount(Long id){
-        Checking account = checkingRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
-        account.checkMonthlyMaintenanceFee();
-        checkingRepository.save(account);
-        return account.getBalance();
-    }
 
-    public Money getBalanceCreditCard(Long id){
-        CreditCard account = creditCardRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
-        account.checkMonthlyInterest();
-        creditCardRepository.save(account);
-        return account.getBalance();
-    }
+
     public Money getBalanceAccount(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "A Account with the given id does not exist")).getBalance();
     }
 
-   public Money transferMoney(Long id, Long recipientId, BigDecimal amount){
+   public Money makeTransfe(Long id, Long recipientId, BigDecimal amount){
         Account accountInitial = accountRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "the account with this ID not exist"));
         Account accountFinal = accountRepository.findById(recipientId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "You can't send money to this account because the ID not exist"));
         //if(accountInitial.getPrimaryOwner().getUserName().equals())
@@ -139,6 +105,19 @@ public class HolderService {
         accountRepository.save(accountFinal);
         accountRepository.save(accountFinal);
         return accountInitial.getBalance();
+    }
+
+    //REVISAAAR!!!
+    public void accountFraud(Transaction transaction) {
+        if (transactionRepository.findById(transaction.getId()).isPresent()){
+            if (transaction.getTimeTransaction().until(LocalTime.now(), ChronoUnit.SECONDS) < 1) {
+                Account account = accountRepository.findById(transaction.getId()).get();
+                account.setStatus(Status.FROZEN);
+                accountRepository.save(account);
+                throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, "calling to the police");
+
+            }
+        }
     }
 
 }

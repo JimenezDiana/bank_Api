@@ -15,19 +15,17 @@ public class Checking extends Account{
     @AttributeOverrides({@AttributeOverride(name = "currency", column = @Column(name = "currency_minimum_balance")), @AttributeOverride(name = "amount", column = @Column(name = "amount_minimum_balance"))})
     private Money minimumBalance = new Money(new BigDecimal("250"));
     private BigDecimal monthlyMaintenanceFee = new BigDecimal("12");
-    private Status status = Status.ACTIVE;
     private LocalDate checkingInterestRate;
 
-    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money minimumBalance, BigDecimal monthlyMaintenanceFee, LocalDate checkingInterestRate) {
-        super(balance, primaryOwner, secondaryOwner, secretKey);
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password, Money minimumBalance, BigDecimal monthlyMaintenanceFee, LocalDate checkingInterestRate) {
+        super(balance, primaryOwner, secondaryOwner, password);
         setMinimumBalance(minimumBalance);
         setMonthlyMaintenanceFee(monthlyMaintenanceFee);
         setCheckingInterestRate(checkingInterestRate);
-        this.status = Status.ACTIVE;
     }
 
-    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
-        super(balance, primaryOwner, secondaryOwner, secretKey);
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password) {
+        super(balance, primaryOwner, secondaryOwner, password);
     }
 
     public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
@@ -80,15 +78,6 @@ public class Checking extends Account{
         this.checkingInterestRate = checkingInterestRate;
         return null;
     }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
     public Money checkMonthlyMaintenanceFee(){
 
         if(Period.between(getCheckingInterestRate().plusMonths(1), LocalDate.now()).getMonths() > 0){

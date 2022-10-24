@@ -20,17 +20,14 @@ public class Savings extends Account{
     //@AttributeOverrides({@AttributeOverride(name = "currency", column = @Column(name = "currency_minimum_balance")), @AttributeOverride(name = "amount", column = @Column(name = "amount_minumum_balance"))})
     @DecimalMin(value = "100.00")
     private BigDecimal minimumBalance =  new BigDecimal("1000");
-    private Status status;
 
     private LocalDate checkingInterestRate;
 
-    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Double interestRate, BigDecimal minimumBalance, LocalDate checkingInterestRate) {
-        super(balance, primaryOwner, secondaryOwner, secretKey);
+    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password, Double interestRate, BigDecimal minimumBalance, LocalDate checkingInterestRate) {
+        super(balance, primaryOwner, secondaryOwner, password);
         setInterestRate(interestRate);
         setCheckingInterestRate(checkingInterestRate);
         setMinimumBalance(minimumBalance);
-
-        this.status = Status.ACTIVE;
     }
 
     public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Double interestRate, Money minimumBalance) {
@@ -91,19 +88,11 @@ public class Savings extends Account{
         this.minimumBalance = minimumBalance;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-
     public Money checkInterest(){
         if (LocalDate.now().isAfter(checkingInterestRate.plusYears(1))){
-            BigDecimal bigDecimal = getBalance().getAmount().multiply(new BigDecimal(interestRate));
-            setBalance((getBalance().increaseAmount(bigDecimal)));
+            BigDecimal subInterest = getBalance().getAmount().multiply(new BigDecimal(interestRate));
+            setBalance((getBalance().increaseAmount(subInterest)));
+
             setCheckingInterestRate(LocalDate.now());
             return getBalance();
         }

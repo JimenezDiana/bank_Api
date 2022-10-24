@@ -7,13 +7,12 @@ import javax.persistence.Entity;
 
 
 @Entity
-public class StudentChecking extends Account{
+public class StudentChecking extends Account {
 
-    private Status status;
 
-    public StudentChecking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
-        super(balance, primaryOwner, secondaryOwner, secretKey);
-        this.status = Status.ACTIVE;
+    public StudentChecking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password) {
+        super(balance, primaryOwner, secondaryOwner, password);
+
     }
 
 
@@ -28,11 +27,4 @@ public class StudentChecking extends Account{
 
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 }

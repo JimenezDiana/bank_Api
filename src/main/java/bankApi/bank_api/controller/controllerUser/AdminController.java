@@ -2,6 +2,8 @@ package bankApi.bank_api.controller.controllerUser;
 import bankApi.bank_api.controller.DTO.AccountDTO;
 import bankApi.bank_api.entities.accounts.*;
 import bankApi.bank_api.entities.users.AccountHolder;
+import bankApi.bank_api.entities.users.Admin;
+import bankApi.bank_api.entities.users.ThirdParty;
 import bankApi.bank_api.entities.users.User;
 import bankApi.bank_api.repository.account.AccountRepository;
 import bankApi.bank_api.repository.user.UserRepository;
@@ -89,5 +91,22 @@ import java.util.Optional;
             adminService.deleteUser(id);
         }
 
+        @GetMapping("/admin/all-accounts")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public void getAccounts(){
+            adminService.getAllAccounts();
+        }
+
+        @PostMapping("/admin/third-party")
+        @ResponseStatus(HttpStatus.CREATED)
+        public ThirdParty createThirdParty(@RequestBody String name, @RequestBody String hashKey){
+            return adminService.createThirdParty(name, hashKey);
+        }
+
+        @PostMapping("/admin/create-admin")
+        @ResponseStatus(HttpStatus.CREATED)
+        public Admin createAdmin(@RequestBody String name, @RequestBody String password){
+            return adminService.createAdmin(name, password);
+        }
     }
 
