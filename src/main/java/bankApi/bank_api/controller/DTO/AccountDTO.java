@@ -1,6 +1,8 @@
 package bankApi.bank_api.controller.DTO;
 
 import bankApi.bank_api.Enum.Status;
+import bankApi.bank_api.entities.accounts.Money;
+import bankApi.bank_api.entities.users.AccountHolder;
 import bankApi.bank_api.entities.users.Adress;
 import com.sun.istack.NotNull;
 
@@ -36,6 +38,9 @@ public class AccountDTO {
 
     private String hashKey;
 
+    public AccountDTO() {
+    }
+
     public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, String name, String amount, LocalDate dateOfBirth, Adress mailing, Adress address, String penaltyFee, Double interestRate, String minimumBalance, Long userId, Long personalId, String password, String status, Long accId, String creditLimit, String hashKey, LocalDate checkingInterestRate) {
         this.balance = balance;
         this.primaryOwnerId = primaryOwnerId;
@@ -56,6 +61,14 @@ public class AccountDTO {
         this.creditLimit = creditLimit;
         this.hashKey = hashKey;
         this.checkingInterestRate = checkingInterestRate;
+    }
+
+    public AccountDTO(String money, Long holder, Long holder2, double v, String money1) {
+        this.balance = money;
+        this.primaryOwnerId = holder;
+        this.secondaryOwnerId = holder2;
+        this.interestRate = v;
+        this.minimumBalance = money1;
     }
 
     public String getBalance() {

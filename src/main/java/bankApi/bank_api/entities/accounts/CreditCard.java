@@ -90,12 +90,12 @@ public class CreditCard extends Account{
 
     public Money checkMonthlyInterest(){
         BigDecimal subInterest =  interestRate.divide(BigDecimal.valueOf(12),4, RoundingMode.HALF_EVEN);
-        if (Period.between(getCheckingInterestRate().plusMonths(1), LocalDate.now()).getMonths() > 0){
+        if (Period.between(getCheckingInterestRate(), LocalDate.now()).getMonths() > 0){
             BigDecimal product = getBalance().getAmount().multiply(subInterest);
-            super.setBalance((getBalance().decreaseAmount(product)));
-            setCheckingInterestRate(checkingInterestRate.plusMonths(1));
+            super.setBalance((getBalance().increaseAmount(product.multiply(new BigDecimal(Period.between(getCheckingInterestRate(), LocalDate.now()).getMonths())).multiply(getBalance().getAmount()))));
+            setCheckingInterestRate(checkingInterestRate.plusMonths(Period.between(getCheckingInterestRate(), LocalDate.now()).getMonths()));
         }
-        setCheckingInterestRate(LocalDate.now());
+
         return getBalance();
     }
 }

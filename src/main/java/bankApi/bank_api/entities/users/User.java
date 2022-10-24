@@ -16,7 +16,7 @@ public class User {
     @Column(unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)

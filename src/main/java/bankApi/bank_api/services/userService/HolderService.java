@@ -70,7 +70,7 @@ public class HolderService {
             return account.getBalance();
         } else if (checkingRepository.existsById(id)) {
             Checking account = checkingRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
-            account.checkMonthlyMaintenanceFee();
+            //account.checkMonthlyMaintenanceFee();
             checkingRepository.save(account);
             return account.getBalance();
         } else if (creditCardRepository.existsById(id)) {

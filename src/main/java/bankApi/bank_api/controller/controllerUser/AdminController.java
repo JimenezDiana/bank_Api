@@ -99,13 +99,13 @@ import java.util.Optional;
 
         @PostMapping("/admin/third-party")
         @ResponseStatus(HttpStatus.CREATED)
-        public ThirdParty createThirdParty(@RequestBody String name, @RequestBody String hashKey){
+        public ThirdParty createThirdParty(@RequestParam String name, @RequestParam String hashKey){
             return adminService.createThirdParty(name, hashKey);
         }
 
         @PostMapping("/admin/create-admin")
         @ResponseStatus(HttpStatus.CREATED)
-        public Admin createAdmin(@RequestBody String name, @RequestBody String password){
+        public Admin createAdmin(@RequestParam String name, @RequestParam String password){
             return adminService.createAdmin(name, password);
         }
     }

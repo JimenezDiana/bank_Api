@@ -14,6 +14,8 @@ import bankApi.bank_api.repository.account.SavingRepository;
 import bankApi.bank_api.repository.user.AdminRepository;
 import bankApi.bank_api.repository.user.HolderRepository;
 import bankApi.bank_api.repository.user.RoleRepository;
+import bankApi.bank_api.repository.user.ThirdPartyRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Assertions;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -33,9 +36,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -57,6 +60,9 @@ public class AdminControllerTest {
     RoleRepository roleRepository;
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    ThirdPartyRepository thirdPartyRepository;
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -80,13 +86,11 @@ public class AdminControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    /*@Test
+    @Test
     @DisplayName("get accounts")
     void get_accounts_ok() throws Exception {
-1   º
-        MvcResult mvcResult = mockMvc.perform(get("/admin/accounts").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/admin/accounts").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isAccepted()).andReturn();
     }
-    */
 
     @Test
     @DisplayName("delete account")
@@ -95,24 +99,39 @@ public class AdminControllerTest {
         assertTrue(!accountRepository.existsById(2L));
     }
 
-    /*@Test
+    @Test
     @DisplayName("Create ThirdParty")
+    @WithMockUser("diana")
     void create_thirparty_ok() throws Exception {
-        ThirdParty thirdParty = new ThirdParty("Cafeteria Buenos dias","29p4823rm");
-        MvcResult mvcResult = mockMvc.perform(post("/admin/third-party").contentType(String.valueOf(thirdParty)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
-        Assertions.assertTrue(mvcResult.getRequest().getContentAsString().contains("Cafeteria Buenos dias"));
-    } --->NO FUNCIONA<--- */
+
+        MvcResult mvcResult = mockMvc.perform(post("/admin/third-party").param("name", "Cafeteria Buenos dias").param("hashKey","945684"))
+                .andExpect(status().isCreated()).andReturn();
+
+        /*System.out.println(mvcResult.getResponse().getContentAsString());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(mvcResult.getResponse().getContentAsString());
+        JsonNode node = jsonNode.get("id");
+        Long id = node.asLong();*/
+
+        //assertTrue(thirdPartyRepository.findById(id).isPresent());
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        Assertions.assertTrue(mvcResult.getResponse().getContentAsString().contains("Cafeteria Buenos dias"));
+
+    }
 
     @Test
     @DisplayName("Create Savings Account")
     void create_savingAccount_ok() throws Exception {
-        Savings savings = new Savings(new Money(new BigDecimal("9000")), holder, holder2,0.12, new Money(new BigDecimal("400")));
+
+        AccountDTO savings = new AccountDTO("9000", holder.getId(), holder2.getId(),0.12, "400");
         savings.setInterestRate(0.15);
-        savings.setMinimumBalance(new BigDecimal(250));
-        MvcResult mvcResult = mockMvc.perform(post("/admin/create-saving-account").content(objectMapper.writeValueAsString(savings)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
+        savings.setMinimumBalance("250");
+        MvcResult mvcResult = mockMvc.perform(post("/admin/create-saving-account").content(objectMapper.writeValueAsString(savings))
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
 
-        assertTrue(mvcResult.getResponse().getContentAsString().contains(holder.getId().toString()));
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("9000"));
     }
-
 
 }

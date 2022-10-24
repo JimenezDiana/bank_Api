@@ -1,5 +1,6 @@
 package bankApi.bank_api.entities.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Role {
     private String role;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     public Role(String role, User user){
