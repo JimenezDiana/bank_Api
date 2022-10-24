@@ -44,7 +44,7 @@ public class AdminService {
 
     //public Admin createAdmin()
     public AccountHolder createHolderAccount(AccountDTO holderDTO){
-        AccountHolder accountHolder = new AccountHolder(holderDTO.getName(), holderDTO.getDateOfBirth(), holderDTO.getAddress(), holderDTO.getMailing());
+        AccountHolder accountHolder = new AccountHolder(holderDTO.getName(), holderDTO.getPassword(), holderDTO.getDateOfBirth(), holderDTO.getAddress(), holderDTO.getMailing());
         userRepository.save(accountHolder);
         roleRepository.save(new Role("USER", accountHolder));
         return accountHolder;
