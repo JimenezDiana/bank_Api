@@ -1,6 +1,5 @@
 package bankApi.bank_api.entities.accounts;
 
-import bankApi.bank_api.Enum.Status;
 import bankApi.bank_api.entities.users.AccountHolder;
 
 import javax.persistence.*;
@@ -15,13 +14,13 @@ public class Checking extends Account{
     @AttributeOverrides({@AttributeOverride(name = "currency", column = @Column(name = "currency_minimum_balance")), @AttributeOverride(name = "amount", column = @Column(name = "amount_minimum_balance"))})
     private Money minimumBalance = new Money(new BigDecimal("250"));
     private BigDecimal monthlyMaintenanceFee = new BigDecimal("12");
-    //private LocalDate checkingInterestRate;
+    private LocalDate checkingInterestRate;
 
     public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password, Money minimumBalance, BigDecimal monthlyMaintenanceFee, LocalDate checkingInterestRate) {
         super(balance, primaryOwner, secondaryOwner, password);
         setMinimumBalance(minimumBalance);
         setMonthlyMaintenanceFee(monthlyMaintenanceFee);
-       // setCheckingInterestRate(checkingInterestRate);
+        setCheckingInterestRate(checkingInterestRate);
     }
 
     public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password) {
@@ -70,25 +69,24 @@ public class Checking extends Account{
         this.monthlyMaintenanceFee = monthlyMaintenanceFee;
     }
 
-    //public LocalDate getCheckingInterestRate() {
-        //return checkingInterestRate;
-    //}
+    public LocalDate getCheckingInterestRate() {
+        return checkingInterestRate;
+    }
 
-    //public Money setCheckingInterestRate(LocalDate checkingInterestRate) {
-      //  this.checkingInterestRate = checkingInterestRate;
-        //return null;
-  //  }
-    /*public Money checkMonthlyMaintenanceFee(){
+    public Money setCheckingInterestRate(LocalDate checkingInterestRate) {
+      this.checkingInterestRate = checkingInterestRate;
+        return null;
+    }
+    public void checkMonthlyMaintenanceFee(){
 
         if(Period.between(getCheckingInterestRate().plusMonths(1), LocalDate.now()).getMonths() > 0){
             super.setBalance(getBalance().decreaseAmount(monthlyMaintenanceFee));
-            return setCheckingInterestRate(checkingInterestRate.plusMonths(1));
+            setCheckingInterestRate(checkingInterestRate.plusMonths(1));
+            return;
         }
         setCheckingInterestRate(LocalDate.now());
 
 
-
-        return getBalance();
-} */
+    }
 }
 

@@ -134,4 +134,10 @@ public class AdminControllerTest {
         assertTrue(mvcResult.getResponse().getContentAsString().contains("9000"));
     }
 
+    @Test
+    @DisplayName("Create checking account")
+    void create_checking_account_ok(){
+        AccountDTO checkingDTO = new AccountDTO()
+    }
+
 }

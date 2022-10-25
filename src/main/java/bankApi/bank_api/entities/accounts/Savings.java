@@ -38,15 +38,15 @@ public class Savings extends Account{
     }
 
 
-    /*public void setBalance(BigDecimal balance){
+    public void setBalance(BigDecimal balance){
         if(minimumBalance == null){
-            minimumBalance =  new Money(new BigDecimal("1000"));
+            minimumBalance =  new BigDecimal("1000");
         }
-        if(balance.getAmount().compareTo(minimumBalance.getAmount()) < 0){
-            balance.getAmount().subtract(getPenaltyFee().getAmount());
+        if(new Money(balance).getAmount().compareTo(new Money(minimumBalance).getAmount()) < 0){
+            new Money(balance).getAmount().subtract(getPenaltyFee().getAmount());
         }
         super.setBalance(new BigDecimal(String.valueOf(balance)));
-    }*/
+    }
 
     public Double getInterestRate() {
         return interestRate;

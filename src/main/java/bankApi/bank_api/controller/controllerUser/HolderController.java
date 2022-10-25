@@ -1,5 +1,6 @@
 package bankApi.bank_api.controller.controllerUser;
 
+import bankApi.bank_api.entities.Transaction;
 import bankApi.bank_api.entities.accounts.Account;
 import bankApi.bank_api.entities.accounts.Money;
 import bankApi.bank_api.repository.account.AccountRepository;
@@ -37,23 +38,24 @@ public class HolderController {
         return holderService.getBalanceAccount(id);
     }
 
-    @GetMapping("/acc-holder/accounts")
+    @GetMapping("/acc-holder/account/primary-secondary/owner")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<Account> getAccounts(Long id){
+    public List<Account> getAccounts(@RequestParam Long id){
         return holderService.getAccounts(id);
     }
 
     @GetMapping("/acc-holder/balance-interestRate")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Money getBalanceWithInterest(@RequestParam Long id){
-       return holderService.getBalanceByIdAcc(id);
+       return holderService.balanceWithInterestAcc(id);
     }
 
-    @PutMapping("/acc-holder/tranfe")
+    @PutMapping("/acc-holder/transfe")
     @ResponseStatus(HttpStatus.CREATED)
     public Money transfe(@RequestParam Long id, @RequestParam Long recipientId, @RequestParam BigDecimal amount){
         return holderService.makeTransfe(id, recipientId, amount);
     }
+
 
 
 }

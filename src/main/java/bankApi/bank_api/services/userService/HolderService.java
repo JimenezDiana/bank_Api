@@ -56,24 +56,24 @@ public class HolderService {
 
 
     public List<Account> getAccounts(Long id){
-        List<Account> accounts= accountRepository.findByPrimaryOwner(holderRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "this ID doesn't match with any user")));
-        accounts.addAll(accountRepository.findBySecondaryOwner(holderRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "this ID doesn't match with any user"))));
+        List<Account> accounts= accountRepository.findByPrimaryOwner(holderRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID NOT FOUND")));
+        accounts.addAll(accountRepository.findBySecondaryOwner(holderRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID NOT FOUND"))));
         return accounts;
     }
 
     //////MIRAR BIEN/////--> get balance con las formulas...pero no funciona!!
-    public Money getBalanceByIdAcc(Long id){
-        if (savingRepository.existsById(id)){
+   /* public Money getBalanceByIdAcc(Long id){
+        if (savingRepository.findById(id).isPresent()){
             Savings account = savingRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
             account.checkInterest();
             savingRepository.save(account);
             return account.getBalance();
-        } else if (checkingRepository.existsById(id)) {
+        } else if (checkingRepository.findById(id).isPresent()) {
             Checking account = checkingRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
-            //account.checkMonthlyMaintenanceFee();
+            account.checkMonthlyMaintenanceFee();
             checkingRepository.save(account);
             return account.getBalance();
-        } else if (creditCardRepository.existsById(id)) {
+        } else if (creditCardRepository.findById(id).isPresent()) {
             CreditCard account = creditCardRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"The account doesn't exist."));
             account.checkMonthlyInterest();
             creditCardRepository.save(account);
@@ -83,13 +83,19 @@ public class HolderService {
             return account.getBalance();
         }
 
+    }*/
+
+    public Money balanceWithInterestAcc(Long id){
+            Savings savings = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "this ID is not a saving account"));
+            savings.checkInterest();
+            savingRepository.save(savings);
+            return savings.getBalance();
+
     }
 
 
-
-
     public Money getBalanceAccount(Long id) {
-        return accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "A Account with the given id does not exist")).getBalance();
+        return accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID not found")).getBalance();
     }
 
    public Money makeTransfe(Long id, Long recipientId, BigDecimal amount){
@@ -107,14 +113,14 @@ public class HolderService {
         return accountInitial.getBalance();
     }
 
-    //REVISAAAR!!!
+    //REVISAAAR!!
     public void accountFraud(Transaction transaction) {
         if (transactionRepository.findById(transaction.getId()).isPresent()){
             if (transaction.getTimeTransaction().until(LocalTime.now(), ChronoUnit.SECONDS) < 1) {
                 Account account = accountRepository.findById(transaction.getId()).get();
                 account.setStatus(Status.FROZEN);
                 accountRepository.save(account);
-                throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, "calling to the police");
+                throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, "You're account is frozen by fraud");
 
             }
         }
