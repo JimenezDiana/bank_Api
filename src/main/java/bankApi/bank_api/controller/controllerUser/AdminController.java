@@ -85,11 +85,11 @@ import java.util.Optional;
             adminService.deleteAccount(id);
         }
 
-        @DeleteMapping("/admin/delete-user/")
+        /*@DeleteMapping("/admin/delete-user/")
         @ResponseStatus(HttpStatus.ACCEPTED)
         public void deleteUser(@RequestParam Long id){
             adminService.deleteUser(id);
-        }
+        }*/
 
         @GetMapping("/admin/all-accounts")
         @ResponseStatus(HttpStatus.ACCEPTED)

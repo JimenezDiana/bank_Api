@@ -117,10 +117,10 @@ public class AdminService {
         accountRepository.deleteById(deleteAcc.getId());
     }
 
-    public void deleteUser(Long id){
+    /*public void deleteUser(Long id){
         User deleteUser = userRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "wrong id"));
         userRepository.deleteById(deleteUser.getId());
-    }
+    }*/
 
     public List<Account> getAllAccounts(){return accountRepository.findAll();}
     public List<User> getAllUsers(){return userRepository.findAll();}

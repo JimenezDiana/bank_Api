@@ -3,18 +3,12 @@ package bankApi.bank_api.user;
 import bankApi.bank_api.controller.DTO.AccountDTO;
 import bankApi.bank_api.controller.DTO.AdminDTO;
 import bankApi.bank_api.entities.accounts.*;
-import bankApi.bank_api.entities.users.AccountHolder;
-import bankApi.bank_api.entities.users.Admin;
-import bankApi.bank_api.entities.users.Adress;
-import bankApi.bank_api.entities.users.ThirdParty;
+import bankApi.bank_api.entities.users.*;
 import bankApi.bank_api.repository.account.AccountRepository;
 import bankApi.bank_api.repository.account.CheckingRepository;
 import bankApi.bank_api.repository.account.CreditCardRepository;
 import bankApi.bank_api.repository.account.SavingRepository;
-import bankApi.bank_api.repository.user.AdminRepository;
-import bankApi.bank_api.repository.user.HolderRepository;
-import bankApi.bank_api.repository.user.RoleRepository;
-import bankApi.bank_api.repository.user.ThirdPartyRepository;
+import bankApi.bank_api.repository.user.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +40,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AdminControllerTest {
 
     @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
     AdminRepository adminRepository;
@@ -60,9 +58,6 @@ public class AdminControllerTest {
     @Autowired
     RoleRepository roleRepository;
     @Autowired
-    AccountRepository accountRepository;
-
-    @Autowired
     ThirdPartyRepository thirdPartyRepository;
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -72,6 +67,7 @@ public class AdminControllerTest {
     private Admin admin;
     private Account checkingAccount, savingAccount, creditAccount;
     private AccountHolder holder, holder2;
+    private User user;
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @BeforeEach
@@ -81,8 +77,8 @@ public class AdminControllerTest {
         savingAccount = savingRepository.save(new Savings(new Money(new BigDecimal("2540")), holder2, holder2, 0.15, new BigDecimal("8050")));
         creditAccount = creditCardRepository.save(new CreditCard(new Money(new BigDecimal("35423")), holder, holder2,new BigDecimal("10000"), new BigDecimal("0.18"), passwordEncoder.encode("e845ugne"), LocalDate.now()));
         holder = holderRepository.save(new AccountHolder("John Wayne", passwordEncoder.encode("123456b"), LocalDate.of(1905, 2, 15), new Adress("John Wayne St", "Girona", "Spain", "08902"), new Adress("34th, St", "New York", "USA", "010101A")));
-        holder2 = holderRepository.save(new AccountHolder("Judit Butler", passwordEncoder.encode("Tgvl44f"), LocalDate.of(1960, 9, 21), new Adress("Maria Cristina", "Barcelona", "Spain", "08012"), new Adress("5th, Av", "New York", "USA", "010101A")));
-
+        holder2 = holderRepository.save(new AccountHolder("Chomsky", passwordEncoder.encode("Tgvl44f"), LocalDate.of(1960, 9, 21), new Adress("Maria Cristina", "Barcelona", "Spain", "08012"), new Adress("5th, Av", "New York", "USA", "010101A")));
+        user = userRepository.save(new User("Ragnar", "12345"));
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
@@ -91,6 +87,7 @@ public class AdminControllerTest {
     @DisplayName("get accounts")
     void get_accounts_ok() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/admin/accounts").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isAccepted()).andReturn();
+        assertTrue(accountRepository.findById(1L).isPresent());
     }
 
     @Test
@@ -108,15 +105,15 @@ public class AdminControllerTest {
         MvcResult mvcResult = mockMvc.perform(post("/admin/third-party").param("name", "Cafeteria Buenos dias").param("hashKey","945684"))
                 .andExpect(status().isCreated()).andReturn();
 
-        /*System.out.println(mvcResult.getResponse().getContentAsString());
+        System.out.println(mvcResult.getResponse().getContentAsString());
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(mvcResult.getResponse().getContentAsString());
         JsonNode node = jsonNode.get("id");
-        Long id = node.asLong();*/
+        Long id = node.asLong();
 
-        //assertTrue(thirdPartyRepository.findById(id).isPresent());
-        System.out.println(mvcResult.getResponse().getContentAsString());
-        Assertions.assertTrue(mvcResult.getResponse().getContentAsString().contains("Cafeteria Buenos dias"));
+        assertTrue(thirdPartyRepository.findById(id).isPresent());
+        //System.out.println(mvcResult.getResponse().getContentAsString());
+        //Assertions.assertTrue(mvcResult.getResponse().getContentAsString().contains("Cafeteria Buenos dias"));
 
     }
 
@@ -156,6 +153,27 @@ public class AdminControllerTest {
     }
 
     @Test
-    @DisplayName()
+    @DisplayName("get balance")
+    void get_balance_ok() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/admin/balance").param("id", "1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted()).andReturn();
+        assertTrue(accountRepository.findById(1L).isPresent());
+    }
+
+    @Test
+    @DisplayName("change balance")
+    void change_balance_ok() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(patch("/admin/change-balance").param("id", "1").param("balance", "1000").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted()).andReturn();
+
+        /*System.out.println(mvcResult.getResponse().getContentAsString());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(mvcResult.getResponse().getContentAsString());
+        JsonNode node = jsonNode.get("id");
+        Long id = node.asLong();*/
+
+        assertTrue(thirdPartyRepository.findById(1L).isPresent());
+    }
+
 
 }
