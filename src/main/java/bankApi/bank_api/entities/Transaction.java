@@ -25,7 +25,7 @@ public class Transaction {
 
     private LocalDate timeTransaction;
 
-    private String TypeOfTransaction;
+    private String typeOfTransaction;
 
     public Money getQuantity(){return quantity;}
 
@@ -50,7 +50,7 @@ public class Transaction {
         this.quantity = quantity;
         this.recipientId = recipientId;
         this.timeTransaction = timeTransaction;
-        TypeOfTransaction = typeOfTransaction;
+        this.typeOfTransaction = typeOfTransaction;
     }
 
     public Long getId() {
@@ -82,11 +82,11 @@ public class Transaction {
     }
 
     public String getTypeOfTransaction() {
-        return TypeOfTransaction;
+        return typeOfTransaction;
     }
 
     public void setTypeOfTransaction(String typeOfTransaction) {
-        TypeOfTransaction = typeOfTransaction;
+        typeOfTransaction = typeOfTransaction;
     }
 }
 

@@ -10,5 +10,4 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    //Optional<BigDecimal> maxTransaction(Long id);
 }

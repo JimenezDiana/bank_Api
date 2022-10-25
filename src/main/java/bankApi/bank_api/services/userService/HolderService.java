@@ -85,13 +85,11 @@ public class HolderService {
 
     }*/
 
-    public Money balanceWithInterestAcc(Long id){
+    public void balanceWithInterestAcc(Long id){
             Savings savings = savingRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "this ID is not a saving account"));
-            savings.checkInterest();
+            savings.setBalance(getBalanceAccount(id));
             savingRepository.save(savings);
-            return savings.getBalance();
-
-    }
+                }
 
 
     public Money getBalanceAccount(Long id) {
@@ -113,7 +111,7 @@ public class HolderService {
         return accountInitial.getBalance();
     }
 
-    //REVISAAAR!!
+    //REVISAAAR!! (VOID O TRANSACTION)
     public void accountFraud(Transaction transaction) {
         if (transactionRepository.findById(transaction.getId()).isPresent()){
             if (transaction.getTimeTransaction().until(LocalTime.now(), ChronoUnit.SECONDS) < 1) {

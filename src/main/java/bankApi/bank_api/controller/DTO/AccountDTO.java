@@ -63,12 +63,29 @@ public class AccountDTO {
         this.checkingInterestRate = checkingInterestRate;
     }
 
-    public AccountDTO(String money, Long holder, Long holder2, double v, String money1) {
-        this.balance = money;
-        this.primaryOwnerId = holder;
-        this.secondaryOwnerId = holder2;
-        this.interestRate = v;
-        this.minimumBalance = money1;
+    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, double interestRate, String minimumBalance) { //--> Constructor test Saving
+        this.balance = balance;
+        this.primaryOwnerId = primaryOwnerId;
+        this.secondaryOwnerId = secondaryOwnerId;
+        this.interestRate = interestRate;
+        this.minimumBalance = minimumBalance;
+    }
+
+    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, String creditLimit, double interestRate, String password, LocalDate checkingInterestRate){
+        this.balance = balance;
+        this.primaryOwnerId = primaryOwnerId;
+        this.secondaryOwnerId = secondaryOwnerId;
+        this.creditLimit = creditLimit;
+        this.interestRate = interestRate;
+        this.password = password;
+        this.dateOfBirth = checkingInterestRate;
+    }
+//balance,primaryOwner, secondaryOwner, creditLimit, interestRate, creditDTO.getPassword(),creditDTO.getCheckingInterestRate()
+    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, LocalDate dateOfBirth){ //--> constructor test Checking account & student account
+        this.balance = balance;
+        this.primaryOwnerId = primaryOwnerId;
+        this.secondaryOwnerId = secondaryOwnerId;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getBalance() {

@@ -46,8 +46,8 @@ public class HolderController {
 
     @GetMapping("/acc-holder/balance-interestRate")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Money getBalanceWithInterest(@RequestParam Long id){
-       return holderService.balanceWithInterestAcc(id);
+    public void getBalanceWithInterest(@RequestParam Long id){
+      holderService.balanceWithInterestAcc(id);
     }
 
     @PutMapping("/acc-holder/transfe")
@@ -56,6 +56,11 @@ public class HolderController {
         return holderService.makeTransfe(id, recipientId, amount);
     }
 
+    @PutMapping("/acc-holder/fraud")
+    @ResponseStatus(HttpStatus.ALREADY_REPORTED)
+    public void accountFraud(@RequestParam Transaction transaction){
+        holderService.accountFraud(transaction);
+    }
 
 
 }

@@ -73,14 +73,6 @@ public class BankApiApplication implements CommandLineRunner {
 
 
 
-		Savings savings = new Savings(new Money(new BigDecimal("800")), accountHolderA, accountHolder, 0.15, new Money(new BigDecimal("200")));
-		Savings savingsB = new Savings(new Money(new BigDecimal("400000")), accountHolderB, accountHolderA, 0.15, new Money(new BigDecimal("1000")));
-		Savings savingsC = new Savings(new Money(new BigDecimal("797955")), accountHolderB, accountHolder3, 0.15, new Money(new BigDecimal("789")));
-		savingRepository.save(savings);
-		savingRepository.save(savingsB);
-		savingRepository.save(savingsC);
-
-
 		CreditCard creditCard = new CreditCard(new Money(new BigDecimal("50000")), accountHolder, accountHolderB, passwordEncoder.encode("fñd,"));
 		CreditCard creditCardB = new CreditCard(new Money(new BigDecimal("596900")), accountHolderB, accountHolder2, passwordEncoder.encode("fñd,"));
 		CreditCard creditCardC = new CreditCard(new Money(new BigDecimal("999099")), accountHolder3, accountHolderA, passwordEncoder.encode("fñd,"));
@@ -116,5 +108,12 @@ public class BankApiApplication implements CommandLineRunner {
 		//adminRepository.save(admin2);
 		//adminRepository.save(admin3);
 		//adminRepository.save(admin4);
+
+		Savings savings = new Savings(new Money(new BigDecimal("800")), accountHolderA, accountHolder, 0.15, new Money(new BigDecimal("200")));
+		Savings savingsB = new Savings(new Money(new BigDecimal("400000")), accountHolderB, accountHolderA, 0.15, new Money(new BigDecimal("1000")));
+		Savings savingsC = new Savings(new Money(new BigDecimal("797955")), accountHolderB, accountHolder3, 0.15, new Money(new BigDecimal("789")));
+		savingRepository.save(savings);
+		savingRepository.save(savingsB);
+		savingRepository.save(savingsC);
 	}
 }

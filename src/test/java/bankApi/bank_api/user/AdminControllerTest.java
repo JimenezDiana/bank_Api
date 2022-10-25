@@ -15,6 +15,7 @@ import bankApi.bank_api.repository.user.AdminRepository;
 import bankApi.bank_api.repository.user.HolderRepository;
 import bankApi.bank_api.repository.user.RoleRepository;
 import bankApi.bank_api.repository.user.ThirdPartyRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -136,8 +137,22 @@ public class AdminControllerTest {
 
     @Test
     @DisplayName("Create checking account")
-    void create_checking_account_ok(){
-        AccountDTO checkingDTO = new AccountDTO()
+    void create_checking_account_ok() throws Exception {
+        AccountDTO checking = new AccountDTO("309440", holder.getId(), holder2.getId(), LocalDate.of(1980, 2,11));
+        MvcResult mvcResult = mockMvc.perform(post("/admin/student-or-checking-account").content(objectMapper.writeValueAsString(checking))
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("309440"));
+    }
+
+    @Test
+    @DisplayName("Create checking account")
+    void create_credit_card_account_ok() throws Exception {
+        AccountDTO credit = new AccountDTO("309440", holder.getId(), holder2.getId(), "1000", 0.15, "jsjs", LocalDate.of(1990, 2, 3));
+        MvcResult mvcResult = mockMvc.perform(post("/admin/student-or-checking-account").content(objectMapper.writeValueAsString(credit))
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("309440"));
     }
 
 }

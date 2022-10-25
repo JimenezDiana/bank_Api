@@ -45,7 +45,7 @@ public class Savings extends Account{
         if(new Money(balance).getAmount().compareTo(new Money(minimumBalance).getAmount()) < 0){
             new Money(balance).getAmount().subtract(getPenaltyFee().getAmount());
         }
-        super.setBalance(new BigDecimal(String.valueOf(balance)));
+        super.setBalance(balance);
     }
 
     public Double getInterestRate() {
@@ -88,7 +88,7 @@ public class Savings extends Account{
         this.minimumBalance = minimumBalance;
     }
 
-    public Money checkInterest(){
+   /* public Money checkInterest(){
         if (LocalDate.now().isAfter(checkingInterestRate.plusYears(1))){
             BigDecimal subInterest = getBalance().getAmount().multiply(new BigDecimal(interestRate));
             setBalance((getBalance().increaseAmount(subInterest)));
@@ -96,6 +96,6 @@ public class Savings extends Account{
             setCheckingInterestRate(LocalDate.now());
             return getBalance();
         }
-        return getBalance();
-    }
+        return getBalance()
+    }*/
 }
