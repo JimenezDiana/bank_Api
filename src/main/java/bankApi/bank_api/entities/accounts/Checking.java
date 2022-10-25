@@ -23,12 +23,10 @@ public class Checking extends Account{
         setCheckingInterestRate(checkingInterestRate);
     }
 
-    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String password) {
-        super(balance, primaryOwner, secondaryOwner, password);
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+        super(balance, primaryOwner, secondaryOwner, "12345");
     }
 
-    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
-    }
 
     public Checking() {
 
@@ -50,7 +48,7 @@ public class Checking extends Account{
         if(balance.getAmount().compareTo(minimumBalance.getAmount()) < 0){
             balance.getAmount().subtract(getPenaltyFee().getAmount());
         }
-        super.setBalance(new BigDecimal(String.valueOf(balance)));
+        super.setBalance(balance);
     }
     public void setMinimumBalance(Money minimumBalance) {
 
@@ -77,16 +75,6 @@ public class Checking extends Account{
       this.checkingInterestRate = checkingInterestRate;
         return null;
     }
-    public void checkMonthlyMaintenanceFee(){
 
-        if(Period.between(getCheckingInterestRate().plusMonths(1), LocalDate.now()).getMonths() > 0){
-            super.setBalance(getBalance().decreaseAmount(monthlyMaintenanceFee));
-            setCheckingInterestRate(checkingInterestRate.plusMonths(1));
-            return;
-        }
-        setCheckingInterestRate(LocalDate.now());
-
-
-    }
 }
 

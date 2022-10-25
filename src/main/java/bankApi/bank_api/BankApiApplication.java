@@ -109,9 +109,9 @@ public class BankApiApplication implements CommandLineRunner {
 		//adminRepository.save(admin3);
 		//adminRepository.save(admin4);
 
-		Savings savings = new Savings(new Money(new BigDecimal("800")), accountHolderA, accountHolder, 0.15, new Money(new BigDecimal("200")));
-		Savings savingsB = new Savings(new Money(new BigDecimal("400000")), accountHolderB, accountHolderA, 0.15, new Money(new BigDecimal("1000")));
-		Savings savingsC = new Savings(new Money(new BigDecimal("797955")), accountHolderB, accountHolder3, 0.15, new Money(new BigDecimal("789")));
+		Savings savings = new Savings(new Money(new BigDecimal("800")), accountHolderA, accountHolder, 0.15, new BigDecimal("200"));
+		Savings savingsB = new Savings(new Money(new BigDecimal("400000")), accountHolderB, accountHolderA, 0.15, new BigDecimal("1000"));
+		Savings savingsC = new Savings(new Money(new BigDecimal("797955")), accountHolderB, accountHolder3, 0.15, new BigDecimal("789"));
 		savingRepository.save(savings);
 		savingRepository.save(savingsB);
 		savingRepository.save(savingsC);

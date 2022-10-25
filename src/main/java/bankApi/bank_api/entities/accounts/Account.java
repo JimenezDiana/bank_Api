@@ -23,7 +23,7 @@ public abstract class Account {
     private Money balance;
 
     @ManyToOne
-    @JoinColumn(name = "id_primary_owner")
+    //@JoinColumn(name = "id_primary_owner")
     private AccountHolder primaryOwner;
 
     @Embedded
@@ -31,7 +31,7 @@ public abstract class Account {
     private final Money penaltyFee = new Money (new BigDecimal("40"));
 
     @ManyToOne
-    @JoinColumn(name = "id_secondary_owner")
+    //@JoinColumn(name = "id_secondary_owner")
     private AccountHolder secondaryOwner;
 
     private LocalDate creationDate;
@@ -50,7 +50,7 @@ public abstract class Account {
         setPrimaryOwner(primaryOwner);
         setSecondaryOwner(secondaryOwner);
         this.creationDate = LocalDate.now();
-        setSecretKey(password);
+        setPassword(password);
         this.status = Status.ACTIVE;
     }
 
@@ -62,22 +62,6 @@ public abstract class Account {
     }*/
 
     public Account() {
-    }
-
-    public String getSecretKey() {
-        return password;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.password = secretKey;
-    }
-
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
     }
 
     public Long getId() {
@@ -92,8 +76,8 @@ public abstract class Account {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = new Money(balance);
+    public void setBalance(Money balance) {
+        this.balance = balance;
     }
 
     public AccountHolder getPrimaryOwner() {
@@ -104,18 +88,9 @@ public abstract class Account {
         this.primaryOwner = primaryOwner;
     }
 
-    public List<Transaction> getTransactionList() {
-        return transactionList;
-    }
-
-    public void setTransactionList(List<Transaction> transactionList) {
-        this.transactionList = transactionList;
-    }
-
     public Money getPenaltyFee() {
         return penaltyFee;
     }
-
 
     public AccountHolder getSecondaryOwner() {
         return secondaryOwner;
@@ -125,8 +100,20 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    public void setBalance(Money balance) {
-        this.balance = balance;
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 
     public String getPassword() {

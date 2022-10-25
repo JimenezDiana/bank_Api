@@ -60,9 +60,9 @@ public class AdminService {
                 secondaryOwner = holderRepository.findById(savingDto.getSecondaryOwnerId()).get();
             }
             //Money penaltyFee = new Money(new BigDecimal(savingDto.getPenaltyFee()));
-            Money minimumBalance = new Money(new BigDecimal(savingDto.getMinimumBalance()));
 
-            return savingRepository.save(new Savings(balance,primaryOwner, secondaryOwner, savingDto.getInterestRate(), minimumBalance ));
+
+            return savingRepository.save(new Savings(balance,primaryOwner, secondaryOwner, savingDto.getInterestRate(), savingDto.getMinimumBalance() ));
         }
         throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "primary holder does not exist");
 
@@ -73,21 +73,21 @@ public class AdminService {
     }
 
     public Account createCheckingAccount(AccountDTO checkingDTO){
-        if(accountRepository.findById(checkingDTO.getPrimaryOwnerId()).isPresent()){
+        if(holderRepository.findById(checkingDTO.getPrimaryOwnerId()).isPresent()){
             Money balance = new Money(new BigDecimal(checkingDTO.getBalance()));
             AccountHolder primaryOwner = holderRepository.findById(checkingDTO.getPrimaryOwnerId()).get();
             AccountHolder secondaryOwner = null;
 
-            if(checkingDTO.getPrimaryOwnerId() != null && accountRepository.findById(checkingDTO.getSecondaryOwnerId()).isPresent()){
+            if(checkingDTO.getSecondaryOwnerId() != null && holderRepository.findById(checkingDTO.getSecondaryOwnerId()).isPresent()){
                 secondaryOwner = holderRepository.findById(checkingDTO.getSecondaryOwnerId()).get();
             }
 
             //Money penaltyFee = new Money(new BigDecimal(checkingDTO.getPenaltyFee()));
 
             if(Period.between(primaryOwner.getDateOfBirth(), LocalDate.now()).getYears() >= 24 && Period.between(secondaryOwner.getDateOfBirth(), LocalDate.now()).getYears() >= 24) {
-                return accountRepository.save(new Checking(balance, primaryOwner, secondaryOwner));
+                return checkingRepository.save(new Checking(balance, primaryOwner, secondaryOwner));
             }
-            return accountRepository.save(new StudentChecking(balance, primaryOwner, secondaryOwner));
+            return studentCheckingRepository.save(new StudentChecking(balance, primaryOwner, secondaryOwner));
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "it can't resolve");
     }
@@ -103,10 +103,10 @@ public class AdminService {
             if(creditDTO.getSecondaryOwnerId() != null && holderRepository.findById(creditDTO.getSecondaryOwnerId()).isPresent()){
                 secondaryOwner = holderRepository.findById(creditDTO.getSecondaryOwnerId()).get();
             }
-            //BigDecimal penaltyFee = new BigDecimal(creditDTO.getPenaltyFee());
-            //BigDecimal penaltyFee = new BigDecimal(creditDTO.getPenaltyFee());
-            BigDecimal creditLimit = new BigDecimal(creditDTO.getCreditLimit());
-            BigDecimal interestRate = new BigDecimal(creditDTO.getInterestRate());
+            BigDecimal interestRate = null;
+            if(creditDTO.getInterestRate()!=null){
+            interestRate = new BigDecimal(creditDTO.getInterestRate());}
+            BigDecimal creditLimit = creditDTO.getCreditLimit();
             return creditCardRepository.save(new CreditCard(balance,primaryOwner, secondaryOwner, creditLimit, interestRate, creditDTO.getPassword(),creditDTO.getCheckingInterestRate()));
         }
         throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "primary holder does not exist");
@@ -131,7 +131,7 @@ public class AdminService {
     }
     public Account modifyBalance(Long accId, BigDecimal balance){
         Account acc = accountRepository.findById(accId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "this id doesn't exists"));
-        acc.setBalance(balance);
+        acc.setBalance(new Money(balance));
         return accountRepository.save(acc);
     }
 

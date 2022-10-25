@@ -101,8 +101,8 @@ public class HolderService {
         Account accountFinal = accountRepository.findById(recipientId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "You can't send money to this account because the ID not exist"));
         //if(accountInitial.getPrimaryOwner().getUserName().equals())
        if(accountInitial.getBalance().getAmount().compareTo(amount) < 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "in this account you don't have money");
-       accountInitial.setBalance(accountInitial.getBalance().decreaseAmount(amount));
-       accountFinal.setBalance(accountFinal.getBalance().increaseAmount(amount));
+       accountInitial.setBalance(new Money(accountInitial.getBalance().decreaseAmount(amount)));
+       accountFinal.setBalance(new Money(accountFinal.getBalance().increaseAmount(amount)));
 
         Transaction transaction = new Transaction(id, accountInitial, new Money(new BigDecimal(String.valueOf(amount))), recipientId, LocalDate.now(), "savings");
         transactionRepository.save(transaction);

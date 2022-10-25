@@ -30,7 +30,10 @@ public class Savings extends Account{
         setMinimumBalance(minimumBalance);
     }
 
-    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Double interestRate, Money minimumBalance) {
+    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Double interestRate, BigDecimal minimumBalance) {
+        super(balance, primaryOwner, secondaryOwner, "12345");
+        this.interestRate = interestRate;
+        this.minimumBalance = minimumBalance;
     }
 
     public Savings() {
@@ -42,10 +45,10 @@ public class Savings extends Account{
         if(minimumBalance == null){
             minimumBalance =  new BigDecimal("1000");
         }
-        if(new Money(balance).getAmount().compareTo(new Money(minimumBalance).getAmount()) < 0){
-            new Money(balance).getAmount().subtract(getPenaltyFee().getAmount());
+        if(balance.compareTo(minimumBalance) < 0){
+            balance = balance.subtract(getPenaltyFee().getAmount());
         }
-        super.setBalance(balance);
+        super.setBalance(new Money(balance));
     }
 
     public Double getInterestRate() {
@@ -59,6 +62,7 @@ public class Savings extends Account{
             this.interestRate = interestRate;
         }
 
+
     }
 
     public LocalDate getCheckingInterestRate(LocalDate localDate) {
@@ -70,8 +74,7 @@ public class Savings extends Account{
     }
 
     public void setCheckingInterestRate(LocalDate checkingInterestRate) {
-
-        this.checkingInterestRate = checkingInterestRate;
+        if(checkingInterestRate!=null)this.checkingInterestRate = checkingInterestRate;
     }
 
     public BigDecimal getMinimumBalance() {
@@ -79,13 +82,13 @@ public class Savings extends Account{
     }
 
     public void setMinimumBalance(BigDecimal minimumBalance) {
-
+        if(minimumBalance!= null)this.minimumBalance = minimumBalance;
         /* if(minimumBalance.getAmount().compareTo(new BigDecimal("100")) < 0){
             throw new IllegalArgumentException("You can't have less than 100eur");
         } else {
             this.minimumBalance = minimumBalance;
         }*/
-        this.minimumBalance = minimumBalance;
+
     }
 
    /* public Money checkInterest(){

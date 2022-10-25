@@ -6,6 +6,7 @@ import bankApi.bank_api.entities.users.AccountHolder;
 import bankApi.bank_api.entities.users.Adress;
 import com.sun.istack.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class AccountDTO {
@@ -22,7 +23,7 @@ public class AccountDTO {
     private Adress address;
     private String penaltyFee;
     private Double interestRate;
-    private String minimumBalance;
+    private BigDecimal minimumBalance;
 
     private Long userId;
 
@@ -32,7 +33,7 @@ public class AccountDTO {
     private String status;
 
     private Long accId;
-    private String creditLimit;
+    private BigDecimal creditLimit;
 
     private LocalDate checkingInterestRate;
 
@@ -41,7 +42,7 @@ public class AccountDTO {
     public AccountDTO() {
     }
 
-    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, String name, String amount, LocalDate dateOfBirth, Adress mailing, Adress address, String penaltyFee, Double interestRate, String minimumBalance, Long userId, Long personalId, String password, String status, Long accId, String creditLimit, String hashKey, LocalDate checkingInterestRate) {
+    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, String name, String amount, LocalDate dateOfBirth, Adress mailing, Adress address, String penaltyFee, Double interestRate, BigDecimal minimumBalance, Long userId, Long personalId, String password, String status, Long accId, BigDecimal creditLimit, String hashKey, LocalDate checkingInterestRate) {
         this.balance = balance;
         this.primaryOwnerId = primaryOwnerId;
         this.secondaryOwnerId = secondaryOwnerId;
@@ -63,7 +64,7 @@ public class AccountDTO {
         this.checkingInterestRate = checkingInterestRate;
     }
 
-    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, double interestRate, String minimumBalance) { //--> Constructor test Saving
+    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, double interestRate, BigDecimal minimumBalance) { //--> Constructor test Saving
         this.balance = balance;
         this.primaryOwnerId = primaryOwnerId;
         this.secondaryOwnerId = secondaryOwnerId;
@@ -71,7 +72,7 @@ public class AccountDTO {
         this.minimumBalance = minimumBalance;
     }
 
-    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, String creditLimit, double interestRate, String password, LocalDate checkingInterestRate){
+    public AccountDTO(String balance, Long primaryOwnerId, Long secondaryOwnerId, BigDecimal creditLimit, double interestRate, String password, LocalDate checkingInterestRate){
         this.balance = balance;
         this.primaryOwnerId = primaryOwnerId;
         this.secondaryOwnerId = secondaryOwnerId;
@@ -176,11 +177,11 @@ public class AccountDTO {
         this.interestRate = interestRate;
     }
 
-    public String getMinimumBalance() {
+    public BigDecimal getMinimumBalance() {
         return minimumBalance;
     }
 
-    public void setMinimumBalance(String minimumBalance) {
+    public void setMinimumBalance(BigDecimal minimumBalance) {
         this.minimumBalance = minimumBalance;
     }
 
@@ -224,11 +225,11 @@ public class AccountDTO {
         this.accId = accId;
     }
 
-    public String getCreditLimit() {
+    public BigDecimal getCreditLimit() {
         return creditLimit;
     }
 
-    public void setCreditLimit(String creditLimit) {
+    public void setCreditLimit(BigDecimal creditLimit) {
         this.creditLimit = creditLimit;
     }
 

@@ -25,7 +25,7 @@ public class CreditCard extends Account{
 
     public CreditCard(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal creditLimit, BigDecimal interestRate,  String password, LocalDate checkingInterestRate) {
         super(balance, primaryOwner, secondaryOwner, password);
-        this.creditLimit = creditLimit;
+        setCreditLimit(creditLimit);
         setInterestRate(interestRate);
         setCheckingInterestRate(checkingInterestRate);
     }
@@ -46,15 +46,16 @@ public class CreditCard extends Account{
         return this.creditLimit;
     }
 
-    /*public void setCreditLimit(BigDecimal creditLimit) {
-        if (creditLimit.getAmount().compareTo(new BigDecimal("100000")) > 0) {
+    public void setCreditLimit(BigDecimal creditLimit) {
+        if(creditLimit!=null)
+        /*if (creditLimit.getAmount().compareTo(new BigDecimal("100000")) > 0) {
             throw new IllegalArgumentException("You can't hava more than 100000");
         } else if (creditLimit.getAmount().compareTo(new BigDecimal("0")) < 0) {
             throw new IllegalArgumentException("You can't have less than 1eur");
-        } else {
+        } else {*/
             this.creditLimit = creditLimit;
-        }
-    }*/
+
+    }
 
     public BigDecimal getInterestRate() {
         return interestRate;
@@ -71,13 +72,14 @@ public class CreditCard extends Account{
     }*/
 
     public void setInterestRate(BigDecimal interestRate) {
+        if(interestRate != null){
         if (interestRate.compareTo(new BigDecimal(0.1)) < 0) {
             throw new IllegalArgumentException("The interest rate can not be less than 0.1");
         } else if (interestRate.compareTo(new BigDecimal(0.2)) > 0) {
             throw new IllegalArgumentException("The interest rate must be between 0.2 ant 0.1");
         } else {
             this.interestRate = interestRate;
-        }
+        }}
     }
 
     public LocalDate getCheckingInterestRate() {
@@ -92,7 +94,7 @@ public class CreditCard extends Account{
         BigDecimal subInterest =  interestRate.divide(BigDecimal.valueOf(12),4, RoundingMode.HALF_EVEN);
         if (Period.between(getCheckingInterestRate(), LocalDate.now()).getMonths() > 0){
             BigDecimal product = getBalance().getAmount().multiply(subInterest);
-            super.setBalance((getBalance().increaseAmount(product.multiply(new BigDecimal(Period.between(getCheckingInterestRate(), LocalDate.now()).getMonths())).multiply(getBalance().getAmount()))));
+            //super.setBalance(getBalance().increaseAmount(product.multiply(new BigDecimal(Period.between(getCheckingInterestRate(), LocalDate.now()).getMonths())).multiply(getBalance().getAmount()))));
             setCheckingInterestRate(checkingInterestRate.plusMonths(Period.between(getCheckingInterestRate(), LocalDate.now()).getMonths()));
         }
 

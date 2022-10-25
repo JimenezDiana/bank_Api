@@ -77,8 +77,8 @@ public class AdminControllerTest {
     @BeforeEach
     void setUp(){
         admin = adminRepository.save(new Admin("Diana J", passwordEncoder.encode("Aloha666")));
-        checkingAccount = checkingRepository.save(new Checking(new Money(new BigDecimal("655042")), holder, holder, passwordEncoder.encode("ksdjg406i.")));
-        savingAccount = savingRepository.save(new Savings(new Money(new BigDecimal("2540")), holder2, holder2, 0.15, new Money(new BigDecimal("8050"))));
+        //checkingAccount = checkingRepository.save(new Checking(new Money(new BigDecimal("655042")), holder, holder, passwordEncoder.encode("ksdjg406i.")));
+        savingAccount = savingRepository.save(new Savings(new Money(new BigDecimal("2540")), holder2, holder2, 0.15, new BigDecimal("8050")));
         creditAccount = creditCardRepository.save(new CreditCard(new Money(new BigDecimal("35423")), holder, holder2,new BigDecimal("10000"), new BigDecimal("0.18"), passwordEncoder.encode("e845ugne"), LocalDate.now()));
         holder = holderRepository.save(new AccountHolder("John Wayne", passwordEncoder.encode("123456b"), LocalDate.of(1905, 2, 15), new Adress("John Wayne St", "Girona", "Spain", "08902"), new Adress("34th, St", "New York", "USA", "010101A")));
         holder2 = holderRepository.save(new AccountHolder("Judit Butler", passwordEncoder.encode("Tgvl44f"), LocalDate.of(1960, 9, 21), new Adress("Maria Cristina", "Barcelona", "Spain", "08012"), new Adress("5th, Av", "New York", "USA", "010101A")));
@@ -124,9 +124,9 @@ public class AdminControllerTest {
     @DisplayName("Create Savings Account")
     void create_savingAccount_ok() throws Exception {
 
-        AccountDTO savings = new AccountDTO("9000", holder.getId(), holder2.getId(),0.12, "400");
+        AccountDTO savings = new AccountDTO("9000", holder.getId(), holder2.getId(),0.12, new BigDecimal(400));
         savings.setInterestRate(0.15);
-        savings.setMinimumBalance("250");
+        savings.setMinimumBalance(new BigDecimal(250));
         MvcResult mvcResult = mockMvc.perform(post("/admin/create-saving-account").content(objectMapper.writeValueAsString(savings))
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
 
@@ -146,13 +146,16 @@ public class AdminControllerTest {
     }
 
     @Test
-    @DisplayName("Create checking account")
+    @DisplayName("Create credit card account")
     void create_credit_card_account_ok() throws Exception {
-        AccountDTO credit = new AccountDTO("309440", holder.getId(), holder2.getId(), "1000", 0.15, "jsjs", LocalDate.of(1990, 2, 3));
+        AccountDTO credit = new AccountDTO("309440", holder.getId(), holder2.getId(), new BigDecimal(1000), 0.15, "jsjs", LocalDate.of(1990, 2, 3));
         MvcResult mvcResult = mockMvc.perform(post("/admin/student-or-checking-account").content(objectMapper.writeValueAsString(credit))
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
 
         assertTrue(mvcResult.getResponse().getContentAsString().contains("309440"));
     }
+
+    @Test
+    @DisplayName()
 
 }
