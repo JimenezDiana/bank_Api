@@ -59,17 +59,10 @@ public class AdminService {
             if(savingDto.getSecondaryOwnerId() != null && holderRepository.findById(savingDto.getSecondaryOwnerId()).isPresent()){
                 secondaryOwner = holderRepository.findById(savingDto.getSecondaryOwnerId()).get();
             }
-            //Money penaltyFee = new Money(new BigDecimal(savingDto.getPenaltyFee()));
-
-
             return savingRepository.save(new Savings(balance,primaryOwner, secondaryOwner, savingDto.getInterestRate(), savingDto.getMinimumBalance() ));
         }
         throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "primary holder does not exist");
 
-
-        //       AccountHolder accountHolder = holderRepository.findById(savingDto.getPrimaryOwner()).get();
-        //       Savings savings = new Savings(savingDto.getBalance(), accountHolder,savingDto.getPenaltyFee(), LocalDate.now(), savingDto.getInterestRate(), savingDto.getMinimumBalance(), savingDto.getSecretKey());
-        //       return savingRepository.save(savings);
     }
 
     public Account createCheckingAccount(AccountDTO checkingDTO){
@@ -81,8 +74,6 @@ public class AdminService {
             if(checkingDTO.getSecondaryOwnerId() != null && holderRepository.findById(checkingDTO.getSecondaryOwnerId()).isPresent()){
                 secondaryOwner = holderRepository.findById(checkingDTO.getSecondaryOwnerId()).get();
             }
-
-            //Money penaltyFee = new Money(new BigDecimal(checkingDTO.getPenaltyFee()));
 
             if(Period.between(primaryOwner.getDateOfBirth(), LocalDate.now()).getYears() >= 24 && Period.between(secondaryOwner.getDateOfBirth(), LocalDate.now()).getYears() >= 24) {
                 return checkingRepository.save(new Checking(balance, primaryOwner, secondaryOwner));
@@ -135,8 +126,8 @@ public class AdminService {
         return accountRepository.save(acc);
     }
 
-    public ThirdParty createThirdParty(String name, String hashKey){
-        ThirdParty thirdParty = new ThirdParty(name, hashKey);
+    public ThirdParty createThirdParty(String name, String hashedKey){
+        ThirdParty thirdParty = new ThirdParty(name, hashedKey);
         return userRepository.save(thirdParty);
     }
 

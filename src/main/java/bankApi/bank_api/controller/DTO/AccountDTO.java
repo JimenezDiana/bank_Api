@@ -89,6 +89,11 @@ public class AccountDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public AccountDTO(Long accId, String amount) {
+        this.accId = accId;
+        this.amount = amount;
+    }
+
     public String getBalance() {
         return balance;
     }

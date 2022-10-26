@@ -90,10 +90,26 @@ public class AdminControllerTest {
         assertTrue(accountRepository.findById(1L).isPresent());
     }
 
+    /*@Test
+    @DisplayName("get accounts by id")
+    void get_accounts_by_id_ok() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/admin/accounts/{id}").param("id", "1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted()).andReturn();
+        assertTrue(accountRepository.findById(1L).isPresent());
+    }*/
+    @Test
+    @DisplayName("get users")
+    void get_users_ok() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/admin/users").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted()).andReturn();
+        assertTrue(accountRepository.findById(1L).isPresent());
+    }
+
     @Test
     @DisplayName("delete account")
     void delete_accounts_ok() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(delete("/admin/delete-account/").param("id","2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isAccepted()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(delete("/admin/delete-account/").param("id","2")
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isAccepted()).andReturn();
         assertTrue(!accountRepository.existsById(2L));
     }
 
@@ -102,7 +118,7 @@ public class AdminControllerTest {
     @WithMockUser("diana")
     void create_thirparty_ok() throws Exception {
 
-        MvcResult mvcResult = mockMvc.perform(post("/admin/third-party").param("name", "Cafeteria Buenos dias").param("hashKey","945684"))
+        MvcResult mvcResult = mockMvc.perform(post("/admin/third-party").param("name", "Cafeteria Buenos dias").param("hashedKey","945684"))
                 .andExpect(status().isCreated()).andReturn();
 
         System.out.println(mvcResult.getResponse().getContentAsString());
@@ -160,20 +176,61 @@ public class AdminControllerTest {
         assertTrue(accountRepository.findById(1L).isPresent());
     }
 
-    @Test
+  /*  @Test
     @DisplayName("change balance")
     void change_balance_ok() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(patch("/admin/change-balance").param("id", "1").param("balance", "1000").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(patch("/admin/change-balance").param("accId","4").param("balance","1000"))
+                .andExpect(status().isOk()).andReturn();
 
-        /*System.out.println(mvcResult.getResponse().getContentAsString());
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(mvcResult.getResponse().getContentAsString());
+        JsonNode node = jsonNode.get("accId");
+        Long id = node.asLong();
+
+        assertTrue(accountRepository.findById(id).isPresent());
+
+                }
+*/
+
+    @Test
+    @DisplayName("get primary owner and secondary owner")
+    void getPrimarySecondaryOwner() throws Exception {
+    MvcResult mvcResult = mockMvc.perform(get("/acc-holder/account/primary-secondary/owner").param("id","2").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isAccepted()).andReturn();
+        assertTrue(holderRepository.findById(2L).isPresent());
+    }
+
+    @Test
+    @DisplayName("balance holder")
+    void balance_holder_ok() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/acc-holder/balance").param("id", "2").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted()).andReturn();
+        assertTrue(holderRepository.findById(2L).isPresent());
+
+    }
+    /*@Test
+    @DisplayName("holder interest rate")
+    void interest_rate_holder() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/acc-holder/balance-interestRate").param("id", "2").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted()).andReturn();
+        assertTrue(holderRepository.findById(2L).isPresent());
+
+    }*/
+    /*@Test
+    @DisplayName("make transfe")
+    @WithMockUser("diana")
+    void make_transfer_ok() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform(put("/acc-holder/transfe").param("id", "1").param("recipientId", "2L").param("amount", "5984"))
+                .andExpect(status().isCreated()).andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(mvcResult.getResponse().getContentAsString());
         JsonNode node = jsonNode.get("id");
-        Long id = node.asLong();*/
+        Long id = node.asLong();
 
-        assertTrue(thirdPartyRepository.findById(1L).isPresent());
-    }
-
-
+        assertTrue(holderRepository.findById(id).isPresent());
+    }*/
 }

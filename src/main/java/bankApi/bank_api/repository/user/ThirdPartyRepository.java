@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ThirdPartyRepository extends JpaRepository<ThirdParty, Long> {
-    Optional<String> findByHashKey(String hashKey);
+    Optional<String> findByHashedKey(String hashedKey);
 }

@@ -24,10 +24,8 @@ public class SavingDto {
     @NotNull
     private Double interestRate;
 
-    @NotNull
-    private String secretKey;
 
-    public SavingDto(Money balance, Long primaryOwner, BigDecimal penaltyFee, Money minimumBalance, LocalDate createdAccount, Adress adress, Double interestRate, String secretKey) {
+    public SavingDto(Money balance, Long primaryOwner, BigDecimal penaltyFee, Money minimumBalance, LocalDate createdAccount, Adress adress, Double interestRate) {
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.penaltyFee = penaltyFee;
@@ -35,17 +33,8 @@ public class SavingDto {
         this.createdAccount = createdAccount;
         this.adress = adress;
         this.interestRate = interestRate;
-        this.secretKey = secretKey;
-    }
 
-    public String getSecretKey() {
-        return secretKey;
     }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
     public Money getBalance() {
         return balance;
     }
