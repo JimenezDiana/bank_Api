@@ -217,7 +217,7 @@ public class AdminControllerTest {
         assertTrue(holderRepository.findById(2L).isPresent());
 
     }*/
-    /*@Test
+    @Test
     @DisplayName("make transfe")
     @WithMockUser("diana")
     void make_transfer_ok() throws Exception {
@@ -232,5 +232,5 @@ public class AdminControllerTest {
         Long id = node.asLong();
 
         assertTrue(holderRepository.findById(id).isPresent());
-    }*/
+    }
 }
