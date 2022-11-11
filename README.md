@@ -167,8 +167,8 @@ __________________________________________________
 
 <b> 🔸This project it's about a Java SpringBoot backend</b><br>
 <b> 🔸 Everything it's stored in MySQL database</b> <br>
-<b> 🔸 Include authentication with Spring Security</b> <br>
-<b> 🔸 And include unit and integration test</b>
+<b> 🔸 Includes authentication with Spring Security</b> <br>
+<b> 🔸 And includes unit and integration testing</b>
 
 
 
