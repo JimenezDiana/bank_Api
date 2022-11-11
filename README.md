@@ -5,7 +5,7 @@ In this java project I built a banking system where there are <b>three types of 
  * Users
  * Account Holders
 
-And also exists <b>four types of accounts</b>:
+There are also <b>four types of accounts</b>:
 * StudentChecking
 * Checking
 * Savings
