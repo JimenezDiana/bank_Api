@@ -1,6 +1,6 @@
 # Api Bank by Diana Jiménez
 
-In this java project I built a banking system where exists <b>three types of users</b>:
+In this java project I built a banking system where there are <b>three types of users</b>:
  * Admins
  * Users
  * Account Holders
